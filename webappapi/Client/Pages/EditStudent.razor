@@ -1,0 +1,39 @@
+﻿<!-- Pages/EditStudent.razor -->
+@page "/edit-student/{id:int}"
+@using webappapi.Client.Services
+@using webappapi.Shared
+
+<h3>Edit Student</h3>
+
+<EditForm Model="student" OnValidSubmit="UpdateStudent">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <label for="Name">Name:</label>
+    <InputText id="Name" @bind-Value="student.Name" />
+
+    <button type="submit">Save Changes</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Student student = new Student();
+    private List<Student> students;
+
+    [Inject]
+    private StudentService studentService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        students = (await studentService.GetStudentsAsync()).ToList();
+        student = students.FirstOrDefault(s => s.Id == Id);
+    }
+
+    private async Task UpdateStudent()
+    {
+        await studentService.UpdateStudentAsync(student.Id, student);
+        // Handle successful update
+    }
+}

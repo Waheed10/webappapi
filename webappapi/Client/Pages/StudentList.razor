@@ -1,0 +1,25 @@
+﻿<!-- Pages/StudentList.razor -->
+@page "/students"
+@using webappapi.Client.Services;
+@using webappapi.Shared;
+
+<h3>Students List</h3>
+
+<ul>
+    @foreach (var student in students)
+    {
+        <li>@student.Name</li>
+    }
+</ul>
+
+@code {
+    private List<Student> students;
+
+    [Inject]
+    private StudentService studentService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        students = (await studentService.GetStudentsAsync()).ToList();
+    }
+}
