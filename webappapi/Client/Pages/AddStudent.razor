@@ -1,7 +1,5 @@
-﻿
-@page "/add-student"
-@using webappapi.Client.Services;
-@using webappapi.Shared;
+﻿@page "/add-student"
+@inject StudentService StudentService
 
 <h3>Add Student</h3>
 
@@ -12,20 +10,21 @@
     <label for="Name">Name:</label>
     <InputText id="Name" @bind-Value="newStudent.Name" />
 
+    <label for="Marks">Marks:</label>
+    <InputNumber id="Marks" @bind-Value="newStudent.Marks" />
+
+    <label for="CourseId">Course:</label>
+    <InputNumber id="CourseId" @bind-Value="newStudent.CourseId" />
+
     <button type="submit">Save</button>
 </EditForm>
 
 @code {
     private Student newStudent = new Student();
-    private List<Student> students;
-
-    [Inject]
-    private StudentService studentService { get; set; }
 
     private async Task AddStudent()
     {
-        var addedStudent = await studentService.AddStudentAsync(newStudent);
-        students.Add(addedStudent);
+        var addedStudent = await StudentService.AddStudentAsync(newStudent);
         newStudent = new Student(); // Clear the form
     }
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using webappapi;
-//using webappapi.Server.Data
+using webappapi.Server.Data;
 using webappapi.Shared;
 
 namespace WebApi.Server.Controllers
@@ -24,7 +24,7 @@ namespace WebApi.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
         {
-            return await _context.Students.ToListAsync();
+            return await _context.Students.Include(s => s.Course).ToListAsync();
         }
 
         [HttpPost]
@@ -36,38 +36,6 @@ namespace WebApi.Server.Controllers
             return CreatedAtAction("GetStudent", new { id = student.Id }, student);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutStudent(int id, Student student)
-        {
-            if (id != student.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(student).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StudentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        private bool StudentExists(int id)
-        {
-            return _context.Students.Any(e => e.Id == id);
-        }
+        
     }
 }

@@ -10,6 +10,18 @@ namespace webappapi.Shared
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int Marks { get; set; }
+
+        // Foreign key for Course
+        public int CourseId { get; set; }
+        public Course Course { get; set; }
+    }
+
+    // SharedModels/Course.cs
+    public class Course
+    {
+        public int Id { get; set; }
+        public string CourseName { get; set; }
     }
 
 }
